@@ -3,7 +3,7 @@
 # Usage: archivefs_mount.sh file.(w)arc.gz /mount/point/ (-d)
 
 (
-	FUSE_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+	FUSE_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 	
 	[[ "$3" == "-d" ]] && DEBUG="-Dorg.apache.commons.logging.Log=fuse.logging.FuseLog -Dfuse.logging.level=DEBUG"
 	

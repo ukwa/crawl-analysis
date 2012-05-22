@@ -1,0 +1,29 @@
+Various classes for virus-scanning content during a crawl.
+
+ViralContentProcessor: added to the FetchChain.
+
+	<bean id="viralContent" class="uk.bl.wap.crawler.processor.ViralContentProcessor">
+		<property name="clamdHost" value="localhost" />
+	  	<property name="clamdPortList">
+		<list>
+	    		<value>3310</value>
+	    		<value>3311</value>
+		</list>
+	  	</property>
+		<property name="clamdTimeout" value="0" />
+	</bean>
+
+This maintains an internal pool (ClamdScannerPool) of viral scanners (ClamdScanner) to which each of the incoming CrawlURIs are passed. Each of the ClamdScanner objects relies on an existing existing clamd daemon; multiple daemons can be run via an individual .conf file. The only unique settings necessary for each are 'LocalSocket' (path to .sock file) and 'TCPSocket' (port no. corresponding to the value in the clamdPortList above). The maximum size is limited by the 'StreamMaxLength' setting which defaults to 25M. A non-zero 'clamdTimeout' may result in SocketExceptions for large files.
+
+Viral content is simply annotated with clamd's response, no further direct action is taken. There is a 'AnnotationMatchesListRegexDecideRule' herein to process viral content based on said annotation:
+
+	<property name="shouldProcessRule">
+		<bean class="uk.bl.wap.modules.deciderules.AnnotationMatchesListRegexDecideRule">
+			<property name="decision" value="ACCEPT" />
+			<property name="regexList">
+				<list>
+					<value>^stream:.+FOUND$</value>
+				</list>
+			</property>
+		</bean>
+	</property>

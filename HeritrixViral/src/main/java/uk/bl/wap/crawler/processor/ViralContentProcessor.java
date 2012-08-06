@@ -1,15 +1,13 @@
 package uk.bl.wap.crawler.processor;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.archive.modules.CrawlURI;
 import org.archive.modules.Processor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import uk.bl.wap.util.ClamdScanner;
-import uk.bl.wap.util.ClamdScannerPool;
 
 /**
  * 
@@ -20,7 +18,7 @@ public class ViralContentProcessor extends Processor {
 	private final static Logger LOGGER = Logger.getLogger( ViralContentProcessor.class.getName() );
 	private static final long serialVersionUID = -321505737175991914L;
 	private int virusCount = 0;
-	private ClamdScannerPool pool;
+	private ClamdScanner scanner;
 
 	public ViralContentProcessor() {}
 
@@ -43,15 +41,14 @@ public class ViralContentProcessor extends Processor {
 	 * The list of ports on which instances of clamd can be found.
 	 */
 	{
-		setClamdPortList( new ArrayList<Integer>() );
+		setClamdPort( 3310 );
 	}
-	@SuppressWarnings( "unchecked" )
-	public List<Integer> getClamdPortList() {
-		return ( List<Integer> ) kp.get( "clamdPortList" );
+	public int getClamdPort() {
+		return ( Integer ) kp.get( "clamdPort" );
 	}
 	@Autowired
-	public void setClamdPortList( List<Integer> ports ) {
-		kp.put( "clamdPortList", ports );
+	public void setClamdPort( int port ) {
+		kp.put( "clamdPort", port );
 	}
 
 	/**
@@ -73,24 +70,18 @@ public class ViralContentProcessor extends Processor {
 	 * Initialise the pool of clamd instances.
 	 */
 	{
-		this.pool = new ClamdScannerPool( this.getClamdHost(), this.getClamdPortList(), this.getClamdTimeout() );
+		this.scanner = new ClamdScanner( this.getClamdHost(), this.getClamdPort(), this.getClamdTimeout() );
 	}
 
 	@Override
 	protected void innerProcess( CrawlURI curi ) throws InterruptedException {
-		ClamdScanner scanner = null;
 		try {
-			if( this.pool == null ) {
-				this.pool = new ClamdScannerPool( this.getClamdHost(), this.getClamdPortList(), this.getClamdTimeout() );
-			} else {
-				if( this.pool.getPoolSize() == 0 ) {
-					this.pool.add( this.getClamdHost(), this.getClamdPortList(), this.getClamdTimeout() );
-				}
+			if( this.scanner == null ) {
+				this.scanner = new ClamdScanner( this.getClamdHost(), this.getClamdPort(), this.getClamdTimeout() );
 			}
-			scanner = ( ClamdScanner ) pool.borrow();
 			String result = scanner.clamdScan( curi.getRecorder().getReplayInputStream() );
-			if( result.matches( "^stream:.+$" ) ) {
-				if( ! result.matches( "^stream: OK$" ) ) {
+			if( result.matches( "^([1-2]:\\s+)?stream:.+$" ) ) {
+				if( ! result.matches( "^([1-2]:\\s+)?stream: OK.*$" ) ) {
 					curi.getAnnotations().add( result );
 					virusCount++;
 				}
@@ -99,16 +90,12 @@ public class ViralContentProcessor extends Processor {
 			}
 		} catch( Exception e ) {
 			LOGGER.log( Level.SEVERE, e.toString() );
-		} finally {
-			if( scanner != null ) {
-				pool.putBack( scanner );
-			}
 		}
 	}
 
 	@Override
 	protected boolean shouldProcess( CrawlURI uri ) {
-		return uri.isHttpTransaction();
+		return uri.is2XXSuccess();
 	}
 
 	@Override

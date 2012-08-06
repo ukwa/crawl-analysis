@@ -24,6 +24,12 @@ public class ClamdScannerPool {
 		return objects.size();
 	}
 
+	public void setTimeout( int timeout ) {
+		for( ClamdScanner scanner : objects ) {
+			scanner.setTimeout( timeout );
+		}
+	}
+
 	public int getPoolSize() {
 		return this.objects.size();
 	}

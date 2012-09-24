@@ -20,15 +20,62 @@
 		<dependency>
 			<groupId>com.oracle</groupId>
 			<artifactId>javafx-runtime</artifactId>
-			<version>2.0</version>
+<version>${javafx.version}</version>
 		</dependency>
 	 -->
+<dependency>
+<groupId>com.oracle</groupId>
+<artifactId>javafx</artifactId>
+   <version>2.0</version>
+<systemPath>${java.home}/lib/jfxrt.jar</systemPath>
+<scope>system</scope>
+</dependency>  
 		<dependency>
 			<groupId>org.archive.heritrix</groupId>
 			<artifactId>heritrix-commons</artifactId>
 			<version>3.1.0</version>
 		</dependency>
-    </dependencies>
+		<dependency>
+		 <groupId>org.archive.wayback</groupId>
+		 <artifactId>wayback-core</artifactId>
+		 <version>1.7.0</version>
+		</dependency>
+		<dependency>
+		 <groupId>batik</groupId>
+		 <artifactId>batik-svggen</artifactId>
+		 <version>1.6</version>
+		</dependency>
+		<dependency>
+		 <groupId>batik</groupId>
+		 <artifactId>batik-awt-util</artifactId>
+		 <version>1.6</version>
+		</dependency>
+		<dependency>
+		 <groupId>batik</groupId>
+		 <artifactId>batik-svg-dom</artifactId>
+		 <version>1.6</version>
+		</dependency>
+		<dependency>
+		 <groupId>batik</groupId>
+		 <artifactId>batik-xml</artifactId>
+		 <version>1.6</version>
+		</dependency>
+		<dependency>
+		 <groupId>batik</groupId>
+		 <artifactId>batik-dom</artifactId>
+		 <version>1.6</version>
+		</dependency>
+		<dependency>
+		 <groupId>batik</groupId>
+		 <artifactId>batik-util</artifactId>
+		 <version>1.6</version>
+		</dependency>
+		<dependency>
+		 <groupId>org.jwat</groupId>
+		 <artifactId>jwat-distribution</artifactId>
+		 <version>1.0.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 
     <build>
         <plugins>
@@ -88,7 +135,13 @@
 			<url>http://builds.archive.org:8080/maven2</url>
 			<layout>default</layout>
 		</repository>
-		
+<!--
+        <repository>
+            <id>sonatype-nexus-snapshots</id>
+            <name>Sonatype Nexus Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+ -->  
     </repositories>
 
 </project>

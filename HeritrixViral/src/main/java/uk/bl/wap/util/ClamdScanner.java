@@ -88,7 +88,7 @@ public class ClamdScanner {
 
 			result.append( getResponse( socket ) );
 			if( getVersion ) {
-				result.append( "\n" );
+				result.append( "," );
 				result.append( getResponse( socket ) );
 			}
 		} catch( Exception e ) {

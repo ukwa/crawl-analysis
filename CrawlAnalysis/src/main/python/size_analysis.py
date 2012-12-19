@@ -1,7 +1,6 @@
 
 import sys, re
 import csv
-import mimeparse
 import math
 from collections import defaultdict
 
@@ -31,15 +30,15 @@ def trunc_bytes(bytes):
     lb = math.pow( 2.0, lb )
     return int(lb)
 
-report_file = csv.reader( open(sys.argv[1], "rb"), delimiter=' ')
+report_file = csv.reader( open(sys.argv[1], "rb"), delimiter='\t')
 
 hg = defaultdict(int)
 
 for row in report_file:
-    v = trunc_bytes(row[4])
+    v = trunc_bytes(row[1])
+    #if row[2] == "1":
     hg[v] += 1
 
-#print "Year\tFirst Observed\tLast Observed"
 for i in hg.keys():
     print "{}\t{}\t{}".format( convert_bytes(i), i, hg[i] )
 

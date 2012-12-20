@@ -1,7 +1,0 @@
-This tool relies on code from the FUSE-J project which is currently not included here.
-
-http://fuse-j.sourceforge.net/
-
-Patches to enable FUSE-J to work with Java 1.6  are available via the project's Sourceforge site.
-
-Once built, the warcfs_mount.sh script can be used to mount WARC files. Similarly, the archivefs_mount.sh script should mount both ARC and WARC files.

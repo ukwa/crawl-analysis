@@ -9,4 +9,5 @@ urlpatterns = patterns( 'phantomjs.views',
 	( r'^image/(?P<url>.*)$', 'get_image' ),
 	( r'^urls/(?P<url>.*)$', 'get_urls' ),
 	( r'^traffic/(?P<url>.*)$', 'get_raw' ),
+	( r'^imageurls/(?P<url>.*)$', 'get_image_and_urls' ),
 )

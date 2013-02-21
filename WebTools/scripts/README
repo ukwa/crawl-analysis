@@ -1,0 +1,5 @@
+Various scripts for sending/receiving messages to be processed via the PhantomJS app.
+
+send.py		Sends a message - the body of which is passed as an argument - to the messaging queue.
+receive.py	Pulls a message of the queue, forwards it to a the phantomjs/urls webservice and writes the output.
+receive_mixed	Pulls a message of the queue, forwards it to a the phantomjs/imageurls webservice and writes the output.

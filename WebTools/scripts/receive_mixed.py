@@ -3,10 +3,12 @@ import sys
 import pika
 import gzip
 import base64
+import random
 import urllib2
 import simplejson
 from datetime import datetime
 
+IMAGE_ROOT = "/heritrix/output/images/"
 SERVICE = "http://flock.bl.uk/webtools/imageurls/"
 HOST = "localhost"
 QUEUE = "phantomjs"
@@ -18,7 +20,7 @@ def callback( ch, method, properties, body ):
 		decoded = simplejson.loads( result.read() )[ 0 ]
 		#Handle image
 		image = base64.b64decode( decoded[ "image" ] )
-		filename = str( datetime.now().strftime( "%s" ) ) + ".jpg"
+		filename = IMAGE_ROOT + str( datetime.now().strftime( "%s" ) ) + str( random.randint( 0, 10000 ) ) + ".jpg"
 		file = open( filename, "wb" )
 		file.write( image )
 		file.close()

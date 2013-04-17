@@ -33,8 +33,12 @@ def callback( ch, method, properties, body ):
         except Exception as e:
                 sys.stderr.write( "ERROR: " + str( e ) + "\n" )
 
-connection = pika.BlockingConnection( pika.ConnectionParameters( HOST ) )
-channel = connection.channel()
-channel.queue_declare( queue=QUEUE )
-channel.basic_consume( callback, queue=QUEUE, no_ack=True )
+while True:
+	try:
+		connection = pika.BlockingConnection( pika.ConnectionParameters( HOST ) )
+		channel = connection.channel()
+		channel.queue_declare( queue=QUEUE )
+	except Exception as e:
+		sys.stderr.write( "ERROR: " + str( e ) + "\n" )
+	channel.basic_consume( callback, queue=QUEUE, no_ack=True )
 channel.start_consuming()

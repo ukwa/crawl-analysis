@@ -38,7 +38,7 @@ while True:
 		connection = pika.BlockingConnection( pika.ConnectionParameters( HOST ) )
 		channel = connection.channel()
 		channel.queue_declare( queue=QUEUE )
+		channel.basic_consume( callback, queue=QUEUE, no_ack=True )
+		channel.start_consuming()
 	except Exception as e:
 		sys.stderr.write( "ERROR: " + str( e ) + "\n" )
-	channel.basic_consume( callback, queue=QUEUE, no_ack=True )
-channel.start_consuming()

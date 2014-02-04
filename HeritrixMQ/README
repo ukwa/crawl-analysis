@@ -1,5 +1,0 @@
-The AsynchronousMQExtractor is intended to submit URLs to an external webservice to extract further URLs (currently using a phantomjs-based webservice).
-
-The AsynchronousMQExtractor simply adds a message of the form "<URL|path>" to a messaging queue (currenly using a default installation of RabbitMQ).
-
-The script 'receive.py' pulls messages from this queue, submits them to a webservice and writes the response to the directory specified in the 'path' section of the message (typically Heritrix's 'Action' directory).

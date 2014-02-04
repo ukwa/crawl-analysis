@@ -1,3 +1,6 @@
-This is the git repository for projects relating to The British Library's Web Archiving Programme.
+Crawl Analysis
+--------------
 
-http://www.webarchive.org.uk/
+This repository contains scripts relating to analysis of our domain crawl logs.
+
+Other code held here has been moved to dedicated repositories. See https://github.com/ukwa

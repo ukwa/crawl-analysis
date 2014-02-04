@@ -4,6 +4,7 @@ import pika
 import gzip
 import base64
 import random
+import urllib
 import urllib2
 import simplejson
 from datetime import datetime
@@ -20,7 +21,7 @@ def callback( ch, method, properties, body ):
 		decoded = simplejson.loads( result.read() )[ 0 ]
 		#Handle image
 		image = base64.b64decode( decoded[ "image" ] )
-		filename = IMAGE_ROOT + str( datetime.now().strftime( "%s" ) ) + str( random.randint( 0, 10000 ) ) + ".jpg"
+		filename = IMAGE_ROOT + urllib.quote_plus( url ) + "_" + datetime.now().strftime( "%Y%m%d%H%M%S" ) + ".jpg"
 		file = open( filename, "wb" )
 		file.write( image )
 		file.close()
@@ -39,7 +40,7 @@ while True:
 	try:
 		connection = pika.BlockingConnection( pika.ConnectionParameters( HOST ) )
 		channel = connection.channel()
-		channel.queue_declare( queue=QUEUE )
+		channel.queue_declare( queue=QUEUE, durable=True )
 		channel.basic_consume( callback, queue=QUEUE, no_ack=True )
 		channel.start_consuming()
 	except Exception as e:
